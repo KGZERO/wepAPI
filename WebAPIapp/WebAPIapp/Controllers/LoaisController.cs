@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -19,10 +20,11 @@ namespace WebAPIapp.Controllers
             _context = context;
         }
         [HttpGet]
+        
         public IActionResult GetAll()
         {
             var dsLoai = _context.Loais.ToList();
-            return Ok();
+            return Ok(dsLoai);
         }
         [HttpGet("{id}")]
         public IActionResult GetById(int id)
@@ -33,6 +35,7 @@ namespace WebAPIapp.Controllers
             return Ok(dsLoai);
         }
         [HttpPost]
+        [Authorize]
         public IActionResult Create(LoaiModel model)
         {
             try
