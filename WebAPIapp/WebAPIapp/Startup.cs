@@ -16,6 +16,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WebAPIapp.Data;
+using WebAPIapp.Model;
+using WebAPIapp.Service;
+using WebAPIapp.Services;
 
 namespace WebAPIapp
 {
@@ -30,12 +33,26 @@ namespace WebAPIapp
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
+
         {
 
             services.AddControllers();
             services.AddDbContext<MyDbContext>(option=>{
                 option.UseSqlServer(Configuration.GetConnectionString("MyDb"));
             });
+            services.AddScoped<ILoaiReponsitory, LoaiReponsitory>();
+            services.AddScoped<IHangHoaReponsitory, HangHoaReponsitory>();
+            services.AddScoped<IUserResponsitory, UserResponsitory>();
+            services.Configure<AppSetting>(Configuration.GetSection("AppSettings"));
+            IMvcBuilder builder = services.AddRazorPages();
+            var enviroment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+#if DEBUG
+            if (enviroment == Environments.Development)
+            {
+                builder.AddRazorRuntimeCompilation();
+            }
+#endif
+
 
             var secretKey = Configuration["AppSettings:SecretKey"];
             var secretKeyBytes = Encoding.UTF8.GetBytes(secretKey);
@@ -74,7 +91,7 @@ namespace WebAPIapp
             app.UseHttpsRedirection();
 
             app.UseRouting();
-
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

@@ -13,7 +13,7 @@ namespace WebAPIapp.Controllers
     [ApiController]
     public class HangHoaController : ControllerBase
     {
-        public static List<HangHoa> hangHoas = new List<HangHoa>();
+        public static List<HangHoam> hangHoas = new List<HangHoam>();
         [HttpGet]
         public IActionResult GetAll()
         {
@@ -35,10 +35,10 @@ namespace WebAPIapp.Controllers
             }
         }
         [HttpPost]
-        [Authorize]
+        //[Authorize]
         public IActionResult Create(HangHoaMV hangHoaMV)
         {
-            var hanghoa = new HangHoa
+            var hanghoa = new HangHoam
             {
                 MaHangHoa = Guid.NewGuid(),
                 TenHangHoa = hangHoaMV.TenHangHoa,
@@ -53,7 +53,7 @@ namespace WebAPIapp.Controllers
             
         }
         [HttpPut("{id}")]
-        public IActionResult Edit(string id,HangHoa hangHoaEdit )
+        public IActionResult Edit(string id,HangHoam hangHoaEdit )
         {
             try
             {
@@ -75,7 +75,7 @@ namespace WebAPIapp.Controllers
 
         }
         [HttpDelete("{id}")]
-        public IActionResult Delete(string id, HangHoa hangHoaEdit)
+        public IActionResult Delete(string id, HangHoam hangHoaEdit)
         {
             try
             {

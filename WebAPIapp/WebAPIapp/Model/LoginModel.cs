@@ -6,11 +6,14 @@ using System.Threading.Tasks;
 
 namespace WebAPIapp.Model
 {
-    public class LoaiModel
+    public class LoginModel
     {
-
+       
         [Required]
         [MaxLength(50)]
-        public string TenLoai { get; set; }
+        public string UserName { get; set; }
+        [Required]
+        [MaxLength(50)]
+        public string PassWord { get; set; }
     }
 }
