@@ -61,14 +61,16 @@ namespace WebAPIapp
             {
                 opt.TokenValidationParameters = new TokenValidationParameters
                 {
-                    //t? c?p token
-                    ValidateIssuer = false,
-                    ValidateAudience = false,
-
-                    //ký vào token
                     ValidateIssuerSigningKey = true,
                     IssuerSigningKey = new SymmetricSecurityKey(secretKeyBytes),
+                    ValidateIssuer = false,
+                    ValidateAudience = false,
+                    ValidateLifetime = true,
+                    RequireExpirationTime = false,
 
+                    // Allow to use seconds for expiration of token
+                    // Required only when token lifetime less than 5 minutes
+                    // THIS ONE
                     ClockSkew = TimeSpan.Zero
                 };
             });

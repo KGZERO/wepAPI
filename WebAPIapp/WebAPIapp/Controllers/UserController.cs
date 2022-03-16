@@ -27,16 +27,32 @@ namespace WebAPIapp.Controllers
             _user = user;
         }
         [HttpPost("Login")]
-        public async Task<IActionResult> Login(LoginVm login)
+        public async Task<IActionResult> Login([FromBody] LoginVm login)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
             var logins = await _user.LoginUser(login);
-            if (string.IsNullOrEmpty(logins.ResultObj))
-            {
+            if (logins == null)
                 return BadRequest(logins);
-            }
+
             return Ok(logins);
+        }
+        [HttpPost]
+        [Route("RefreshToken")]
+        public async Task<IActionResult> RefreshToken([FromBody] TokenModel tokenRequest)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest();
+            var res = await _user.VerifyToken(tokenRequest);
+
+            if (res == null)
+            {
+                return BadRequest("null");
+            }
+
+            return Ok(res);
+
+
         }
     }
 }

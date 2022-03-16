@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace WebAPIapp.Common
 {
-    public class ApiErrorResult<T>:ApiRespose<T>
+    public class ApiErrorResult:ApiRespose
     {
         public string[] ValidationError { get; set; }
         public ApiErrorResult(string message)

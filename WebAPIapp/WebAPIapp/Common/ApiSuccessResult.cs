@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using WebAPIapp.Model;
 
 namespace WebAPIapp.Common
 {
-    public class ApiSuccessResult<T>:ApiRespose<T>
+    public class ApiSuccessResult : ApiRespose
     {
-
-        public ApiSuccessResult(T resultObj)
+        public ApiSuccessResult(object resultObj)
         {
             ResultObj = resultObj;
             Success = true;
