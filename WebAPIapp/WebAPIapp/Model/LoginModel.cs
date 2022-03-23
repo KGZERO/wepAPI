@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FluentValidation;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -6,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace WebAPIapp.Model
 {
-    public class LoginModel
+    public class LoginModel: AbstractValidator<LoginVm>
     {
        
         [Required]
@@ -15,5 +16,8 @@ namespace WebAPIapp.Model
         [Required]
         [MaxLength(50)]
         public string PassWord { get; set; }
+        [Required]
+        [MaxLength(50)]
+        public string ConfirmPassWord { get; set; }
     }
 }

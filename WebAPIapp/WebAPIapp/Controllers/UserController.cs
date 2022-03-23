@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
@@ -26,23 +27,25 @@ namespace WebAPIapp.Controllers
         {
             _user = user;
         }
-        [HttpPost("Login")]
+        [HttpPost("login")]
+        [AllowAnonymous]
         public async Task<IActionResult> Login([FromBody] LoginVm login)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
             var logins = await _user.LoginUser(login);
-            if (logins == null)
+            if (logins==null)
                 return BadRequest(logins);
 
             return Ok(logins);
         }
-        [HttpPost]
-        [Route("RefreshToken")]
+        [HttpPost("refreshToken")]
+        [AllowAnonymous]
         public async Task<IActionResult> RefreshToken([FromBody] TokenModel tokenRequest)
         {
             if (!ModelState.IsValid)
                 return BadRequest();
+
             var res = await _user.VerifyToken(tokenRequest);
 
             if (res == null)

@@ -17,8 +17,8 @@ using System.Text;
 using System.Threading.Tasks;
 using WebAPIapp.Data;
 using WebAPIapp.Model;
-using WebAPIapp.Service;
 using WebAPIapp.Services;
+
 
 namespace WebAPIapp
 {
@@ -35,14 +35,16 @@ namespace WebAPIapp
         public void ConfigureServices(IServiceCollection services)
 
         {
-
+            //services.AddHttpContextAccessor();
             services.AddControllers();
+            //khai báo sql
             services.AddDbContext<MyDbContext>(option=>{
                 option.UseSqlServer(Configuration.GetConnectionString("MyDb"));
             });
             services.AddScoped<ILoaiReponsitory, LoaiReponsitory>();
             services.AddScoped<IHangHoaReponsitory, HangHoaReponsitory>();
             services.AddScoped<IUserResponsitory, UserResponsitory>();
+            services.AddHttpContextAccessor();
             services.Configure<AppSetting>(Configuration.GetSection("AppSettings"));
             IMvcBuilder builder = services.AddRazorPages();
             var enviroment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");

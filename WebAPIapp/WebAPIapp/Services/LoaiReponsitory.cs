@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using WebAPIapp.Data;
 using WebAPIapp.Model;
 
-namespace WebAPIapp.Service
+namespace WebAPIapp.Services
 {
     public class LoaiReponsitory : ILoaiReponsitory
     {

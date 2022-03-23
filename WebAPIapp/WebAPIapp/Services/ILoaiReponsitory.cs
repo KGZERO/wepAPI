@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using WebAPIapp.Model;
 
-namespace WebAPIapp.Service
+namespace WebAPIapp.Services
 {
   public  interface ILoaiReponsitory
     {

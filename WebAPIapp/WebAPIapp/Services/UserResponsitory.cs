@@ -27,16 +27,16 @@ namespace WebAPIapp.Services
             _appSetting = optionsMonitor.CurrentValue;
            
         }
-        public async Task<ApiRespose> LoginUser(LoginVm login)
+        public async Task<TokenModel> LoginUser(LoginVm login)
         {
             var user = _context.NguoiDungs.SingleOrDefault(x => x.UserName == login.UserName
              && x.Password == login.Password);
             if (user == null)
             {
-                return new ApiErrorResult("Tài khoản không tồn tại");
+                return null;
             }
-            var token = await GenarateToken(user);
-            return new ApiSuccessResult(token);
+            
+            return  await GenarateToken(user);
 
         }
         private async Task<TokenModel> GenarateToken(NguoiDung nguoiDung)
@@ -82,7 +82,7 @@ namespace WebAPIapp.Services
             return  tokenModels;
         }
 
-        private string GenerateRefreshToken(int length)
+        public string GenerateRefreshToken(int length)
         {
             var random = new Random();
             var chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
@@ -100,7 +100,7 @@ namespace WebAPIapp.Services
                 IssuerSigningKey = new SymmetricSecurityKey(secretKeyBytes),
                 ValidateIssuer = false,
                 ValidateAudience = false,
-                ValidateLifetime = true,
+                ValidateLifetime = false,
                 RequireExpirationTime = false,
             };
             try

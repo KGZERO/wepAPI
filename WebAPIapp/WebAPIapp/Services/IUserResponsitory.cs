@@ -9,7 +9,7 @@ namespace WebAPIapp.Services
 {
     public  interface IUserResponsitory
     {
-        Task<ApiRespose> LoginUser(LoginVm login);
+        Task<TokenModel> LoginUser(LoginVm login);
         Task<ApiRespose> VerifyToken(TokenModel tokenRequest);
     }
 }

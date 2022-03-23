@@ -7,7 +7,7 @@ using WebAPIapp.Data;
 using WebAPIapp.Model;
 using WebAPIapp.Model.Common;
 
-namespace WebAPIapp.Service
+namespace WebAPIapp.Services
 {
     public class HangHoaReponsitory : IHangHoaReponsitory
     {
