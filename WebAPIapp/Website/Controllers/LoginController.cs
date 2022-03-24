@@ -43,11 +43,24 @@ namespace Website.Controllers
                 return View(ModelState);
             var tokenModel = await _userServices.Authenticate(request);
             var userPrincipal = await _userServices.RefreshToken(tokenModel);
-            if (tokenModel == null)
+            if (userPrincipal == null)
                 return null;
+
+            var claims = new List<Claim>() {
+                        new Claim(ClaimTypes.Name, request.UserName),
+                    };
+            var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+            //Initialize a new instance of the ClaimsPrincipal with ClaimsIdentity    
+            var principal = new ClaimsPrincipal(identity);
+            var authProperties = new AuthenticationProperties
+            {
+                ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(10),
+                IsPersistent = false
+            };
+            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal, new AuthenticationProperties());
             return RedirectToAction("Index", "Home");
         }
-        private  ClaimsPrincipal GetPrincipal(string jwtToken)
+        private ClaimsPrincipal GetPrincipal(string jwtToken)
         {
             IdentityModelEventSource.ShowPII = true;
             var secretKeyBytes = Encoding.UTF8.GetBytes(_appSetting.SecretKey);

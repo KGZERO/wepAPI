@@ -47,7 +47,7 @@ namespace Website.Services
             var client = _httpClientFactory.CreateClient();
             client.BaseAddress = new Uri("https://localhost:5001");
             var response = await client.PostAsync("/api/user/refreshToken", httpContent);
-            var tokens = await response.Content.ReadAsStringAsync();
+            var tokens = await response.Content.ReadAsStreamAsync();
             if (response.IsSuccessStatusCode)
                 return new ApiSuccessResult(tokens);
 
