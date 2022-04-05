@@ -22,10 +22,12 @@ namespace WebAPIapp.Controllers
     public class UserController : ControllerBase
     {
         private readonly IUserResponsitory _user;
+        private readonly IMailService _emailSender;
 
-        public UserController(IUserResponsitory user)
+        public UserController(IUserResponsitory user,IMailService emailSender)
         {
             _user = user;
+            _emailSender = emailSender;
         }
         [HttpPost("login")]
         [AllowAnonymous]
@@ -57,5 +59,8 @@ namespace WebAPIapp.Controllers
 
 
         }
+       
+
+       
     }
 }

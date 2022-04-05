@@ -46,8 +46,14 @@ namespace Website
             services.AddControllersWithViews()
                     .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<LoginModel>());
             services.Configure<AppSetting>(Configuration.GetSection("AppSettings"));
-            services.AddTransient<IUserServices, UserServices>();
+            services.AddScoped<IUserServices, UserServices>();
             services.AddScoped<IUserResponsitory, UserResponsitory>();
+
+            var emailConfig = Configuration
+    .GetSection("MailSettings")
+    //.Get<MailSettings>();
+    .Get<EmailConfiguration>();
+            services.AddSingleton(emailConfig);
             IMvcBuilder builder = services.AddRazorPages();
             var enviroment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
 #if DEBUG

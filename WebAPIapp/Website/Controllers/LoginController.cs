@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Logging;
@@ -20,11 +21,13 @@ namespace Website.Controllers
     {
         private readonly IUserServices _userServices;
         private readonly AppSetting _appSetting;
-
+       
+        //private readonly IEmailSender _emailSender;
         public LoginController(IUserServices userServices, IOptionsMonitor<AppSetting> optionsMonitor)
         {
             _userServices = userServices;
             _appSetting = optionsMonitor.CurrentValue;
+          
         }
         public IActionResult Index()
         {
@@ -60,7 +63,24 @@ namespace Website.Controllers
             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal, new AuthenticationProperties());
             return RedirectToAction("Index", "Home");
         }
-        private ClaimsPrincipal GetPrincipal(string jwtToken)
+        [HttpGet]
+        public IActionResult ForgotPassword()
+        {
+            return View();
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ForgotPassword(ForgotPasswordModel forgotPasswordModel)
+        {
+            return View(forgotPasswordModel);
+        }
+        public IActionResult ForgotPasswordConfirmation()
+        {
+            return View();
+        }
+      
+    
+    private ClaimsPrincipal GetPrincipal(string jwtToken)
         {
             IdentityModelEventSource.ShowPII = true;
             var secretKeyBytes = Encoding.UTF8.GetBytes(_appSetting.SecretKey);

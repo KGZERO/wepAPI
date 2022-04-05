@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -44,8 +45,10 @@ namespace WebAPIapp
             services.AddScoped<ILoaiReponsitory, LoaiReponsitory>();
             services.AddScoped<IHangHoaReponsitory, HangHoaReponsitory>();
             services.AddScoped<IUserResponsitory, UserResponsitory>();
+            services.AddScoped<IMailService, MailService>();
             services.AddHttpContextAccessor();
-            services.Configure<AppSetting>(Configuration.GetSection("AppSettings"));
+            services.Configure<MailSettings>(Configuration.GetSection("MailSettings"));
+
             IMvcBuilder builder = services.AddRazorPages();
             var enviroment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
 #if DEBUG
@@ -54,11 +57,15 @@ namespace WebAPIapp
                 builder.AddRazorRuntimeCompilation();
             }
 #endif
+            var emailConfig = Configuration
+    .GetSection("MailSettings")
+    .Get<MailSettings>();
+            services.AddSingleton(emailConfig);
 
 
             var secretKey = Configuration["AppSettings:SecretKey"];
             var secretKeyBytes = Encoding.UTF8.GetBytes(secretKey);
-
+           
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(opt =>
             {
                 opt.TokenValidationParameters = new TokenValidationParameters
